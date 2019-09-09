@@ -1,17 +1,24 @@
 from flask_restful import Resource
+import functools
 
-def recur_fibo(n):
-   if n <= 1:
-       return n
-   else:
-       return(recur_fibo(n-1) + recur_fibo(n-2))
+@functools.lru_cache(None)
+def fibb(n):
+    if n < 2:
+        return n
+    return fibb(n-1) + fibb(n-2)
 
 class FibNum(Resource):
 
     def get(self, fib):
-        if fib <= 1:
-            return fib
-        else:
-            return recur_fibo(fib - 1) + recur_fibo(fib - 2)
-        return {'message': 'Something wrong'}, 404
+        try:
+            if fib <= 1:
+                return fibb
+            else:
+                return fibb(fib - 1) + fibb(fib - 2)
+            return {'message': 'Something wrong'}, 404
+        except RecursionError:
+            return 'Please put smaller value'
 
+class FibString(Resource):
+    def get(self, name):
+        return 'Wrong value: '+ name + '.  Please create endpoint with correct int value for fibonacci calculation'
