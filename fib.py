@@ -17,7 +17,7 @@ class FibNum(Resource):
                 return fibb(fib - 1) + fibb(fib - 2)
             return {'message': 'Something wrong'}, 404
         except RecursionError:
-            return 'Please put smaller value'
+            return 'Please put smaller value to calculate fibonacci number to avoid Recursion Error'
 
 class FibString(Resource):
     def get(self, name):
